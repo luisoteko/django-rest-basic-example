@@ -21,11 +21,6 @@ from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Read secrets
-with open(os.path.join(BASE_DIR, 'notes', 'secrets.json')) as secrets_file:
-    secrets = json.load(secrets_file)
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
