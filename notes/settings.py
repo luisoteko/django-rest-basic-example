@@ -166,10 +166,7 @@ PROFILE_SETTINGS_FIELDS = {
     'PROFILE_SERIALIZER_CLASS': 'mainapp.serializers.UserSerializer',
 }
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'https://sistemasdistribuidos-five.vercel.app/'
-]
+
 APPEND_SLASH = True
 
 CORS_ALLOW_METHODS = [
