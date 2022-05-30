@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import environ
+env = environ.Env()
+environ.Env.read_env()
 from datetime import timedelta
 from pathlib import Path
 import json
@@ -53,12 +55,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+     "rest_framework.authtoken",
     'rest_registration',
+    'corsheaders',
+    'mainapp',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -103,13 +109,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
@@ -143,13 +143,39 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'luisoteko100@gmail.com'
-EMAIL_HOST_PASSWORD = get_secret
+EMAIL_HOST_PASSWORD = get_secret("STMP_PASSWORD")
 
+AUTH_USER_MODEL = 'mainapp.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 REST_REGISTRATION = {
-    'REGISTER_VERIFICATION_URL': 'https://frontend-host/verify-user/',
-    'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/reset-password/',
-    'REGISTER_EMAIL_VERIFICATION_URL': 'https://frontend-host/verify-email/',
+    'RESET_PASSWORD_VERIFICATION_URL': 'https://frontend-host/confirmForgotPassword/',
+    'REGISTER_VERIFICATION_ENABLED': False,
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
 
     'VERIFICATION_FROM_EMAIL': 'luisoteko100@gmail.com',
+    'REGISTER_SERIALIZER_CLASS': 'mainapp.serializers.RegisterSerializer',
+    'REGISTER_OUTPUT_SERIALIZER_CLASS': 'mainapp.serializers.UserSerializer',
+    'LOGIN_AUTHENTICATE_SESSION': True,
 }
+
+PROFILE_SETTINGS_FIELDS = {
+    'PROFILE_SERIALIZER_CLASS': 'mainapp.serializers.UserSerializer',
+}
+CORS_ALLOW_ALL_ORIGINS = True
+APPEND_SLASH = True
+
+CORS_ALLOW_METHODS = [
+'DELETE',
+'GET',
+'OPTIONS',
+'PATCH',
+'POST',
+'PUT',
+]
