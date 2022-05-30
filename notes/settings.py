@@ -26,13 +26,6 @@ with open(os.path.join(BASE_DIR, 'notes', 'secrets.json')) as secrets_file:
     secrets = json.load(secrets_file)
 
 
-def get_secret(setting, secrets=secrets):
-    """Get secret setting or fail with ImproperlyConfigured"""
-    try:
-        return secrets[setting]
-    except KeyError:
-        raise ImproperlyConfigured("Set the {} setting".format(setting))
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -143,7 +136,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'luisoteko100@gmail.com'
-EMAIL_HOST_PASSWORD = get_secret("STMP_PASSWORD")
+EMAIL_HOST_PASSWORD = env("STMP_PASSWORD")
 
 AUTH_USER_MODEL = 'mainapp.User'
 
