@@ -33,16 +33,14 @@ class NotesView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
     
-    def post(self, request, *args, **kwargs):
-        _mutable = request.data._mutable or False
-        request.data._mutable = True
-        request.data['owner'] = request.user
-        request.data['owner_id'] = request.user.id
-        print(request.data['owner'])
-        request.data._mutable = _mutable
-        serializer = self.get_serializer(data=request.data)
-        print(serializer)
-        return super().post(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data.update({'owner': request.user})
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
 class SharedNotesView(generics.ListAPIView):
     serializer_class = NoteSerializer
