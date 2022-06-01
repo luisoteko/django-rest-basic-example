@@ -38,7 +38,7 @@ class NotesView(generics.ListCreateAPIView):
     
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
-        data.update({'owner': request.user})
+        data.update({'owner': request.user.id})
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
