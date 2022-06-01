@@ -36,7 +36,8 @@ class NotesView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         _mutable = request.data._mutable or False
         request.data._mutable = True
-        request.data['owner'] = request.user.id
+        request.data['owner'] = request.user
+        request.data['owner_id'] = request.user.id
         print(request.data['owner'])
         request.data._mutable = _mutable
         serializer = self.get_serializer(data=request.data)
