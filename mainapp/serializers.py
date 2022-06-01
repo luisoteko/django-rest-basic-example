@@ -12,6 +12,11 @@ class NoteSerializer(serializers.ModelSerializer):
     def get_shares(self, obj):
         return NoteShareSerializer(obj.shares.all(), many=True).data 
 
+class NoteCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = '__all__' 
+
 class NoteShareSerializer(serializers.ModelSerializer):
     showed_name = serializers.SerializerMethodField()
     class Meta:

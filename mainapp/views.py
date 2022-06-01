@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from mainapp.serializers import NoteSerializer, NoteShareSerializer
+from mainapp.serializers import NoteCreateSerializer, NoteSerializer, NoteShareSerializer
 
 # Create your views here.
 
@@ -28,8 +28,11 @@ class IsShared(permissions.BasePermission):
             return True
 
 class NotesView(generics.ListCreateAPIView):
-    serializer_class = NoteSerializer
-    
+    def get_serializer_class(self):
+        if (self.request.method == 'POST'):
+            return NoteCreateSerializer
+        else:
+            return NoteSerializer
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
     
